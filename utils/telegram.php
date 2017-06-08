@@ -1,6 +1,8 @@
 <?php
 require_once ("http.php");
 
+define ('BOT_TOKEN', '386938857:AAHnHyE1XOfw31wELyKhvtDvyvUeSbUIuV4');
+
 /* ============================
 	
 		Telegram API

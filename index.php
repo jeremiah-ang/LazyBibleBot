@@ -4,15 +4,19 @@ require_once ('utils/fileSystem.php');
 require_once ('utils/http.php');
 require_once ('utils/telegram.php');
 require_once ('utils/User.php');
-require_once ('utils/usersController.php');
+require_once ('utils/UserController.php');
 
 function process_text ($text, $from) {
 	if ($text == "/start") {
+
+		$userController = new UserController ();
+
 		$username = ($from['username']) ? $from['username'] : $from['first_name'];
 		$id = $from['id'];
-		if (!getAllUsers()->exists($id)) {
-			getAllUsers()->add($id, $username);
-			saveUsers ();
+		$user = new User ($id, $username, NULL);
+
+		if (!$userController->exists($user)) {
+			$userController->create($user);
 			sendMessage ($id, "Subscribed!");
 		}
 	}

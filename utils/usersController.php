@@ -1,5 +1,6 @@
 <?php
 require_once ("User.php");
+require_once ("fileSystem.php");
 
 define ('USER_FILE', 'users.json');
 

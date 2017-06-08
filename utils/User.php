@@ -5,31 +5,33 @@
 
 ============================ */
 
-class Users {
+class User {
 	var $chatIds;
-	var $size;
+	var $username;
+	var $hour;
 
-	function __construct ($json) {
-		$this->chatIds = $json->chatIds;
-		$this->size = $json->size;
+	function __construct ($chatIds, $username, $hour) {
+		$this->chatIds = $chatIds;
+		$this->username = $username;
+		$this->setHour ($hour);
 	}
 
-	function getChatIds () {
+	function getChatId () {
 		return $this->chatIds;
 	}
-
-	function add ($chatId, $username) {
-		$this->chatIds->$chatId = $username;
-		$this->size++;
+	function getUsername () {
+		return $this->username;
 	}
-
-	function delete ($chatId) {
-		unset ($this->chatIds->$chatId);
-		$this->size--;
+	function getHour () {
+		return (is_null($this->hour)) ? "08:00:00" : $this->hour;
 	}
-
-	function exists ($chatId) {
-		return !is_null($this->chatIds->$chatId);
+	function setHour ($hour) {
+		if (is_null($hour) || $hour < 0) 
+			$this->hour = "08:00:00";
+		else {
+			$hour = ($hour < 10) ? "0" . $hour : $hour;
+			$this->hour = $hour . ":00:00";
+		}
 	}
 }
 

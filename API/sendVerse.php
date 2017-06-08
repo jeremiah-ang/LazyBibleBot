@@ -3,8 +3,7 @@ require_once ('../utils/bible.php');
 require_once ('../utils/fileSystem.php');
 require_once ('../utils/http.php');
 require_once ('../utils/telegram.php');
-require_once ('../utils/User.php');
-require_once ('../utils/usersController.php');
+require_once ('../utils/UserController.php');
 
 /* ============================
 	
@@ -12,7 +11,6 @@ require_once ('../utils/usersController.php');
 
 ============================ */
 
-define ('BOT_TOKEN', '386938857:AAHnHyE1XOfw31wELyKhvtDvyvUeSbUIuV4');
 define ('SSH', 'iK~.7?$)[9&u');
 
 $allUsers;
@@ -28,12 +26,14 @@ $completed = 0;
 
 function sendVerseToAll () {
 
-	foreach (getAllUsers()->getChatIds() as $chatId => $username) {
-		sendVerse ($username, $chatId);
+	$userController = new UserController ();
+	$verse = processVerse(getVerse("random"));
+
+	foreach ($userController->getAllUsers() as $user) {
+		sendVerse ($user->getUsername(), $user->getChatId(), $verse);
 	}
 
 	deleteBlockedUsers();
-	saveUsers();
 }
 
 function deleteBlockedUsers () {
@@ -44,15 +44,12 @@ function deleteBlockedUsers () {
 	}
 }
 
-function sendVerse ($username, $chatId) {
-	$response = getVerse ("random");
-	return processVerse ($username, $chatId, $response);
+function processVerse ($verse) {
+	return preg_replace('/<[^>]*>/', "", $verse);
 }
 
-function processVerse ($username, $chatId, $verse) {
+function sendVerse ($username, $chatId, $verse) {
 	global $toDelete;
-
-	$verse = preg_replace('/<[^>]*>/', "", $verse);
 
 	$response = sendMessage ($chatId, $verse);
 
@@ -61,14 +58,14 @@ function processVerse ($username, $chatId, $verse) {
 		echo "Sent to: " . $username . "\n";
 	} else if ($response->error_code == 403) {
 		echo "Failed to Send to: " . $username . "\n";
-		$toDelete[] = $chatId;
+		$toDelete[] = new User($chatId, $username, NULL);
 	}
 
 	return true;
 }
 
 
-
+// readJSON("users.json");
 sendVerseToAll();
 
 ?>
