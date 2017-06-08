@@ -24,13 +24,15 @@ $completed = 0;
 
 ============================ */
 
-function sendVerseToAll () {
+function sendVerseToAll ($hour) {
 
 	$userController = new UserController ();
 	$verse = processVerse(getVerse("random"));
 
 	foreach ($userController->getAllUsers() as $user) {
-		sendVerse ($user->getUsername(), $user->getChatId(), $verse);
+		if ($user->shouldReceive($hour)) {
+			sendVerse ($user->getUsername(), $user->getChatId(), $verse);
+		} 
 	}
 
 	deleteBlockedUsers();
@@ -66,7 +68,7 @@ function sendVerse ($username, $chatId, $verse) {
 
 
 // readJSON("users.json");
-sendVerseToAll();
+sendVerseToAll(12);
 
 ?>
 
