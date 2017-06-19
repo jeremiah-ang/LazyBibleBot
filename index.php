@@ -15,18 +15,36 @@ function webhookCalled () {
 	$update = json_decode($content, true);
 	$text = $update['message']['text'];
 
-	process_text ($text, $update['message']['from']);
+	process_text ($text, $update['message']['chat']);
+}
+
+function getUsername ($from) {
+	$username = "";
+	if ($from['type'] == "group") {
+		$username = $from['title'];
+	} else {
+		$username = ($from['username']) 
+				? $from['username'] 
+				: $from['first_name'];
+	}
+	return $username;
+}
+
+function getId ($from) {
+	return $from['id'];
+}
+
+function getCommand ($text) {
+	preg_match ("/^(\/[a-zA-Z0-9]+)(\@LazyBibleBot)?$/", $text, $matches);
+	return $matches[1];
 }
 
 function process_text ($text, $from) {
 
-	$textArray = explode(" ", $text);
-	$command = $textArray[0];
+	$username = getUsername($from);
+	$id = getId($from);
+	$command = getCommand($text);
 
-	$username = ($from['username']) 
-				? $from['username'] 
-				: $from['first_name'];
-	$id = $from['id'];
 
 	$userController = new UserController ();
 	$user = new User ($id, $username, NULL, NULL);
@@ -42,12 +60,12 @@ function process_text ($text, $from) {
 		getHour ($user, $userController);
 	} else if ($command == "/subscribers") {
 		getSubscriber ($user, $userController);
-	} else {
+	} else if ($command == NULL) {
 		if (User::IS_SET_HOUR_COMMAND($user->getCommand ())) {
 			$hour = $text;
 			setHour ($user, $userController, $hour);
 		} else {
-			sendMessage ($user->getChatId(), "Invalid Command~");
+			
 		}
 	}
 

@@ -25,12 +25,12 @@ function setHour ($user, $userFactory, $hours) {
 		}
 	}
 
-	$msg .= "Hello! Time is only between 0 to 24!!";
+	$msg = "Hello! Time is only between 0 to 24!!";
 	if (trim($setTo) != "") {
 		$msg = "Alright! Sending at " . $setTo . "Hrs";
 		if ($invalid != "") 
 			$msg .= "\nAnd Hello! Time is only between 0 to 24!!";
-	}
+	} 
 
 	sendMessage ($user->getChatId(), $msg);
 
