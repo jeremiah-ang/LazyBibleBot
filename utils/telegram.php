@@ -1,7 +1,7 @@
 <?php
 require_once ("http.php");
 
-define ('BOT_TOKEN', '386938857:AAHnHyE1XOfw31wELyKhvtDvyvUeSbUIuV4');
+define ('BOT_TOKEN', '442396978:AAERK7i9NtJa2CbwKwEgOp7Wmn5L4gtgV7E');
 
 /* ============================
 	
