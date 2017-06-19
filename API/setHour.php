@@ -9,28 +9,34 @@ function setHour ($user, $userFactory, $hours) {
 	$comma = "";
 
 	foreach ($hours as $hour) {
-		if ($commaFlag) {
-			$comma = ",";
-		} else {
-			$commaFlag = true;
-		}
 
-		if (intval($hour) < 0 || intval($hour) > 24) {
+		$hour = trim($hour);
+
+		if (!is_numeric($hour) || intval($hour) < 0 || intval($hour) > 24) {
 			$invalid .= $comma.$hour;
 		} else {
+			if ($commaFlag) {
+				$comma = ",";
+			} else {
+				$commaFlag = true;
+			}
+
 			$setTo .= $comma.$hour;
 		}
 	}
 
-	$user->setHour($setTo);
-	$userFactory->update($user);
-
-	$msg = "Alright! Sending at " . $setTo . "Hrs";
-	if ($invalid != "") 
-		$msg .= "\nAnd Hello! Time is only between 0 to 24!!";
-
+	$msg .= "Hello! Time is only between 0 to 24!!";
+	if (trim($setTo) != "") {
+		$msg = "Alright! Sending at " . $setTo . "Hrs";
+		if ($invalid != "") 
+			$msg .= "\nAnd Hello! Time is only between 0 to 24!!";
+	}
 
 	sendMessage ($user->getChatId(), $msg);
+
+	$user->setHour($setTo);
+	$user->setCommand('NULL');
+	$userFactory->update($user);
 	
 }
 ?>

@@ -28,21 +28,21 @@ function sendVerseToAll ($hour) {
 
 	$userController = new UserController ();
 	$verse = processVerse(getVerse("random"));
-
+	
+	print_r ($verse);
 	foreach ($userController->getAllUsers() as $user) {
 		if ($user->shouldReceive($hour)) {
 			sendVerse ($user->getUsername(), $user->getChatId(), $verse);
 		} 
 	}
 
-	deleteBlockedUsers();
+	deleteBlockedUsers($userController);
 }
 
-function deleteBlockedUsers () {
+function deleteBlockedUsers ($userController) {
 	global $toDelete;
-
 	for ($i = 0; $i < count($toDelete); $i++) {
-		getAllUsers()->delete($toDelete[$i]);
+		$userController->delete($toDelete[$i]);
 	}
 }
 
@@ -60,7 +60,7 @@ function sendVerse ($username, $chatId, $verse) {
 		echo "Sent to: " . $username . "\n";
 	} else if ($response->error_code == 403) {
 		echo "Failed to Send to: " . $username . "\n";
-		$toDelete[] = new User($chatId, $username, NULL);
+		$toDelete[] = new User($chatId, $username, NULL, NULL);
 	}
 
 	return true;
@@ -68,7 +68,7 @@ function sendVerse ($username, $chatId, $verse) {
 
 
 // readJSON("users.json");
-sendVerseToAll(12);
+sendVerseToAll(date('H'));
 
 ?>
 

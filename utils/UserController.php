@@ -1,6 +1,7 @@
 <?php
 require_once ("User.php");
 require_once ("Database.php");
+require_once ("fileSystem.php");
 
 class UserController {
 
@@ -29,7 +30,7 @@ class UserController {
 	function resultsToUsers ($results) {
 		$users = [];
 		while ($result = mysqli_fetch_assoc ($results)) {
-			$users[] = new User($result['chatId'], $result['username'], $result['hour']);
+			$users[] = new User($result['chatId'], $result['username'], $result['hour'], $result['command']);
 		}
 		return $users;
 	}
@@ -57,7 +58,8 @@ class UserController {
 	}
 
 	function update ($user) {
-		$query = "UPDATE `Users` SET `username` = " . $this->quote($user->getUsername()) . ", `hour` = " . $this->quote($user->getHour()) . " WHERE `Users`.`chatId` = " . $user->getChatId();
+		$query = "UPDATE `Users` SET `username` = " . $this->quote($user->getUsername()) . ", `hour` = " . $this->quote($user->getHour()) . ",`command` = " . $this->quote($user->getCommand()) . " WHERE `Users`.`chatId` = " . $user->getChatId();
+		$this->updated();
 		return $this->exec ($query);
 	}
 
