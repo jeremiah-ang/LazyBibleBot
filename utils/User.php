@@ -9,12 +9,15 @@ class User {
 	var $chatIds;
 	var $username;
 	var $hour;
+	var $command;
+	var $cache;
 
-	function __construct ($chatIds, $username, $hour, $command) {
+	function __construct ($chatIds, $username, $hour, $command, $cache) {
 		$this->chatIds = $chatIds;
 		$this->username = $username;
 		$this->setHour ($hour);
 		$this->command = $command;
+		$this->cache = $cache;
 	}
 
 	function shouldReceive ($hour) {
@@ -49,6 +52,14 @@ class User {
 	public static $SET_HOUR_COMMAND = 201;
 	public static function IS_SET_HOUR_COMMAND ($command) {
 		return intval(trim($command)) == User::$SET_HOUR_COMMAND;
+	}
+	public static $SET_BOOK_COMMAND = 202;
+	public static function IS_SET_BOOK_COMMAND ($command) {
+		return intval(trim($command)) == User::$SET_BOOK_COMMAND;
+	}
+	public static $SET_VERSE_COMMAND = 203;
+	public static function IS_SET_VERSE_COMMAND ($command) {
+		return intval(trim($command)) == User::$SET_VERSE_COMMAND;
 	}
 }
 
