@@ -56,15 +56,7 @@ class Bible {
 
 	private function postprocess ($arr) {
 		if (is_string($arr)) {
-			return preg_replace (
-				"/[a-zA-Z]/", 
-				strtoupper('$1'), 
-				preg_replace(
-					"/(\+\w)/", 
-					" " . strtoupper(substr('$1', -1)), 
-					$arr
-				)
-			);
+			return ucwords(preg_replace("/\++/"," ",$arr));
 		}
 		foreach ($arr as $key => $val) {
 			$arr[$key] = $this->postprocess($val);
@@ -126,17 +118,12 @@ class Bible {
 			if (is_null($subtrix)) {
 				// no such prefix 
 				// return best matches 
-				return $this->compress_radix_tree($trix);
+				return $this->postprocess($this->compress_radix_tree($trix));
 			} 
 			$trix = $subtrix;
 		}
 
-		$result;
-		if ($this->is_multi_array($trix)) {
-			$result = $this->compress_radix_tree($trix);
-		} else $result = $trix;
-		$result = $this->postprocess ($result);
-		return $result;
+		return $this->postprocess($this->compress_radix_tree($trix));
 	}
 
 	private function is_multi_array ($arr) {
@@ -144,6 +131,11 @@ class Bible {
 			if (is_array($a)) return true;
 		}
 		return false;
+	}
+
+	static function split_verse ($verse) {
+		preg_match("/([0-9]*\s*[a-zA-Z]+)\s*([0-9]+)\s*:\s*([0-9]+)(\s*-\s*([0-9]+))?/", $verse, $matches);
+		return $matches;
 	}
 }
 ?>

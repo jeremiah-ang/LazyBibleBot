@@ -22,7 +22,7 @@ class Verse {
 		$this->chapter = $arr[4];
 		$this->verseStart = $arr[5];
 		$this->verseEnd = $arr[6];
-		$this->msg = $arr[7];
+		$this->msg = $arr[7]; //preg_replace("/((<b>)(\w*)(<\/b>))+/", "*$3*", $arr[7]);
 
 		
 		$this->plainVerse = $this->getPlainVerse ();
@@ -31,6 +31,9 @@ class Verse {
 	function setBook ($book) { 
 		$this->book = $book; 
 		$this->updateFullVerse();
+	}
+	function setFullVerse ($fullVerse) {
+		$this->fullVerse = $fullVerse;
 	}
 
 	function updateFullVerse () {
@@ -42,7 +45,6 @@ class Verse {
 			} 
 		}
 		$this->fullVerse = $fullVerse;
-
 	}
 
 	function getArrayVerse () {

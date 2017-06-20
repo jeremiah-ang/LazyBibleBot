@@ -12,6 +12,7 @@ function sendRequestedVerse ($user, $userController, $bible, $book, $chapter, $v
 
 	$verseObj = $bible->getVerse(urlencode($fullVerse));
 	$verseObj->setBook($book);
+	$verseObj->setFullVerse($fullVerse);
 
 	if (is_null($verseObj)) {
 		sendMessage($user->getChatId(), "ITS NULL!");

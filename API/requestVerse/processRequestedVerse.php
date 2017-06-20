@@ -3,7 +3,7 @@ require_once ("sendRequestedVerse.php");
 require_once ("getBook.php");
 function processRequestedVerse($user, $userController, $verse) {
 
-	preg_match("/([0-9]*\s*[a-zA-Z]+)\s*([0-9]+)\s*:\s*([0-9]+)(\s*-\s*([0-9]+))?/", $verse, $matches);
+	$matches = Bible::split_verse($verse);
 
 	$book = $matches[1];
 	$chapter = $matches[2];
@@ -23,8 +23,16 @@ function processRequestedVerse($user, $userController, $verse) {
 	$bible = new Bible();
 	$bookSuggestion = $bible->get_books($book);
 	if (count($bookSuggestion) > 1) {
-		return getBook ($user, $userController);
+		$verse = $chapter . ":" . $verseStart;
+		if ($verseEnd)
+			$verse .= "-" . $verseEnd;
+
+		$user->setCache($verse);
+		return getBook ($user, $userController, $bookSuggestion);
 	} 
+
+	if (count($bookSuggestion) > 0) 
+		$book = $bookSuggestion[0];
 
 	sendRequestedVerse($user, $userController, $bible, $book, $chapter, $verseStart, $verseEnd);
 }

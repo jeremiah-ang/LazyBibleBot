@@ -15,6 +15,7 @@ require_once ('API/hour/sendHour.php');
 
 require_once ('API/requestVerse/getVerse.php');
 require_once ('API/requestVerse/processRequestedVerse.php');
+require_once ('API/requestVerse/setBook.php');
 
 require_once ('API/getSubscriber.php');
 
@@ -77,7 +78,9 @@ function process_text ($text, $from) {
 			setHour ($user, $userController, $text);
 		} else if (User::IS_SET_VERSE_COMMAND($user->getCommand())) {
 			processRequestedVerse ($user, $userController, $text);
-		}
+		} else if (User::IS_SET_BOOK_COMMAND($user->getCommand())) {
+			setBook ($user, $userController, $text);
+		} 
 	}
 
 }
