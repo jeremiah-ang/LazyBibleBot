@@ -30,7 +30,7 @@ class UserController {
 	function resultsToUsers ($results) {
 		$users = [];
 		while ($result = mysqli_fetch_assoc ($results)) {
-			$users[] = new User($result['chatId'], $result['username'], $result['hour'], $result['command']);
+			$users[] = new User($result['chatId'], $result['username'], $result['hour'], $result['command'], $result['cache']);
 		}
 		return $users;
 	}
@@ -58,7 +58,7 @@ class UserController {
 	}
 
 	function update ($user) {
-		$query = "UPDATE `Users` SET `username` = " . $this->quote($user->getUsername()) . ", `hour` = " . $this->quote($user->getHour()) . ",`command` = " . $this->quote($user->getCommand()) . " WHERE `Users`.`chatId` = " . $user->getChatId();
+		$query = "UPDATE `Users` SET `username` = " . $this->quote($user->getUsername()) . ", `hour` = " . $this->quote($user->getHour()) . ",`command` = " . $this->quote($user->getCommand()) . ",`cache` = " . $this->quote($user->getCache()) . " WHERE `Users`.`chatId` = " . $user->getChatId();
 		$this->updated();
 		return $this->exec ($query);
 	}

@@ -12,7 +12,7 @@ class User {
 	var $command;
 	var $cache;
 
-	function __construct ($chatIds, $username, $hour, $command, $cache) {
+	function __construct ($chatIds, $username, $hour, $command, $cache="NULL") {
 		$this->chatIds = $chatIds;
 		$this->username = $username;
 		$this->setHour ($hour);
@@ -49,17 +49,20 @@ class User {
 	function getCommand () { return $this->command; }
 	function setCommand ($command) { $this->command = $command; }
 
+	function getCache () { return $this->cache; }
+	function setCache ($cache) { $this->cache = $cache;}
+
 	public static $SET_HOUR_COMMAND = 201;
 	public static function IS_SET_HOUR_COMMAND ($command) {
 		return intval(trim($command)) == User::$SET_HOUR_COMMAND;
 	}
-	public static $SET_BOOK_COMMAND = 202;
-	public static function IS_SET_BOOK_COMMAND ($command) {
-		return intval(trim($command)) == User::$SET_BOOK_COMMAND;
-	}
-	public static $SET_VERSE_COMMAND = 203;
+	public static $SET_VERSE_COMMAND = 204;
 	public static function IS_SET_VERSE_COMMAND ($command) {
 		return intval(trim($command)) == User::$SET_VERSE_COMMAND;
+	}
+	public static $SET_BOOK_COMMAND = 205;
+	public static function IS_SET_BOOK_COMMAND ($command) {
+		return intval(trim($command)) == User::$SET_BOOK_COMMAND;
 	}
 }
 

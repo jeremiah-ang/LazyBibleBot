@@ -28,8 +28,25 @@ class Verse {
 		$this->plainVerse = $this->getPlainVerse ();
 	}
 
+	function setBook ($book) { 
+		$this->book = $book; 
+		$this->updateFullVerse();
+	}
+
+	function updateFullVerse () {
+		$fullVerse = $this->book . " " . $this->chapter;
+		if ($this->verseStart) {
+			$fullVerse .= ":" . $this->verseStart;
+			if ($this->verseEnd) {
+				$fullVerse .= "-" . $this->verseEnd;
+			} 
+		}
+		$this->fullVerse = $fullVerse;
+
+	}
+
 	function getArrayVerse () {
-		preg_match("/(.?)<b>\s*?(([0-9]?\s?[a-zA-Z]+)\s?([0-9]+):([0-9]+)-?([0-9]+)?)\s*?<\/b>(.+)/", $this->passage, $match);
+		preg_match("/(.?)<b>\s*?(([0-9]?\s?[a-zA-Z]*)\s?([0-9]+):([0-9]+)-?([0-9]+)?)\s*?<\/b>(.+)/", $this->passage, $match);
 		return $match;
 	}
 

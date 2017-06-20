@@ -5,12 +5,17 @@ require_once ('utils/http.php');
 require_once ('utils/telegram.php');
 require_once ('utils/User.php');
 require_once ('utils/UserController.php');
+require_once ('utils/getter.php');
+
 require_once ('API/subscribe.php');
-require_once ('API/sendHour.php');
-require_once ('API/setHour.php');
-require_once ('API/getHour.php');
-require_once ('API/getBook.php');
-require_once ('API/sendVerse.php');
+
+require_once ('API/hour/getHour.php');
+require_once ('API/hour/setHour.php');
+require_once ('API/hour/sendHour.php');
+
+require_once ('API/requestVerse/getVerse.php');
+require_once ('API/requestVerse/processRequestedVerse.php');
+
 require_once ('API/getSubscriber.php');
 
 function webhookCalled () {
@@ -55,7 +60,7 @@ function process_text ($text, $from) {
 	if ($userController -> exists($user)) {
 		$user = $userController->retrieve_id($id);
 	}
-
+	
 
 	if ($command == "/start") {
 		subscribe ($user, $userController);
@@ -64,16 +69,14 @@ function process_text ($text, $from) {
 	} else if ($command == "/gethour") {
 		sendHour ($user, $userController);
 	} else if ($command == "/getverse") {
-		getBook ($user, $userController);
+		getVerse ($user, $userController);
 	} else if ($command == "/subscribers") {
 		getSubscriber ($user, $userController);
 	} else if ($command == NULL) {
 		if (User::IS_SET_HOUR_COMMAND($user->getCommand())) {
 			setHour ($user, $userController, $text);
-		} else if (User::IS_SET_BOOK_COMMAND($user->getCommand()){
-			setBook ($user, $userController, $text);
-		} else if (User::IS_SET_VERSE_COMMAND($user->getCommand()){
-			sendRequestedVerse ($user, $userController, $text);
+		} else if (User::IS_SET_VERSE_COMMAND($user->getCommand())) {
+			processRequestedVerse ($user, $userController, $text);
 		}
 	}
 

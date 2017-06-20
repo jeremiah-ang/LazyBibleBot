@@ -31,7 +31,8 @@ function sendVerseToAll ($hour) {
 	$verse = $bible->getVerse("random");
 	
 	foreach ($userController->getAllUsers() as $user) {
-		if ($user->getChatId() == 52621522) {
+		if ($user->shouldReceive($hour)) {
+		//if ($user->getChatId() == 52621522) {
 			sendVerse (
 				$user->getUsername(), 
 				$user->getChatId(), 
